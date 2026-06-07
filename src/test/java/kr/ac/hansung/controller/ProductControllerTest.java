@@ -111,6 +111,27 @@ class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    @DisplayName("ADMIN - 상품 수정 폼 조회 성공 (200)")
+    void editForm_admin_returns200() throws Exception {
+        Product product = new Product("테스트 상품", 15000, "설명", 10);
+        given(productService.findById(1L)).willReturn(product);
+
+        mockMvc.perform(get("/products/1/edit"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("products/edit"))
+            .andExpect(model().attributeExists("productDto"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("일반 USER - 상품 수정 폼 접근 시 403 (권한 없음)")
+    void editForm_user_returns403() throws Exception {
+        mockMvc.perform(get("/products/1/edit"))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("ADMIN - 상품 등록 POST 후 목록으로 리다이렉트")
     void saveProduct_admin_redirectsToList() throws Exception {
         given(productService.save(any())).willReturn(
