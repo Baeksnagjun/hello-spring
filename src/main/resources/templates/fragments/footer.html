@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="practiceFooter" class="mt-5 py-3 border-top bg-white">
+    <div class="container text-center text-muted small">
+        <span id="practice-datetime">실습 수행 일시: 로딩 중...</span>
+        <span class="mx-2">│</span>
+        <span th:text="'학번: ' + ${studentNumber}">학번: 2271525</span>
+        <span class="mx-2">│</span>
+        <span th:text="'성명: ' + ${studentName}">성명: 백상준</span>
+    </div>
+    <script>
+        function updatePracticeDateTime() {
+            const now = new Date();
+            const days = ['일', '월', '화', '수', '목', '금', '토'];
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            const day = days[now.getDay()];
+            const h = now.getHours();
+            const ampm = h < 12 ? '오전' : '오후';
+            const h12 = String(h % 12 || 12).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            const sec = String(now.getSeconds()).padStart(2, '0');
+            const el = document.getElementById('practice-datetime');
+            if (el) {
+                el.textContent = '실습 수행 일시: ' + y + '년 ' + m + '월 ' + d + '일 (' + day + ') ' + ampm + ' ' + h12 + ':' + min + ':' + sec;
+            }
+        }
+        updatePracticeDateTime();
+        setInterval(updatePracticeDateTime, 1000);
+    </script>
+</footer>
+</body>
+</html>
